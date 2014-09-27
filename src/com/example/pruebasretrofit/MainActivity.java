@@ -2,26 +2,31 @@ package com.example.pruebasretrofit;
 
 import java.util.List;
 
-import fb.FacebookConnect;
-
-import retrofit.RestAdapter;
-import rx.Observable;
-import rx.functions.Action1;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import com.easy.facebook.android.data.Photo;
+import com.squareup.picasso.Picasso;
+
+import fb.FacebookConnect;
 
 public class MainActivity extends Activity 
 {
-	
+
+	@InjectView(R.id.llPhotos) LinearLayout llPhotos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		ButterKnife.inject(this);
 		//new BlaAsync().execute();
 		Intent inte=new Intent();
 		inte.setClass(MainActivity.this,FacebookConnect.class);
@@ -29,36 +34,21 @@ public class MainActivity extends Activity
 		
 	}
 	
-	private class BlaAsync extends AsyncTask<Void, Void, Void>
+	@Override
+	protected void onResume() 
 	{
-
-		@Override
-		protected Void doInBackground(Void... params) 
-		{
-
-			try
-			{
-
-				RestAdapter restAdapter = new RestAdapter.Builder()
-			    .setEndpoint("http://192.168.1.128:3000")
-			    .build();
-				ApiService service = restAdapter.create(ApiService.class);
-				List<MyUser> repos = service.listRepos();
-
-				int a=3;
-				int b=a;
-			}
-			catch(Exception e)
-			{
-				int a=3;
-				int b=a;
-			}
-			// TODO Auto-generated method stub
-			return null;
-		}
+		// TODO Auto-generated method stub
+		super.onResume();
 		
+		List<Photo>photos=((Appli)getApplication()).lista;
+		if(photos==null)return;
+		for(Photo photo:photos)
+		{
+			ImageView iv=new ImageView(MainActivity.this);
+			Picasso.with(MainActivity.this).load(photo.getSource()).into(iv);
+			llPhotos.addView(iv);
+		}
 	}
-	
 	
 	
 	@Override
