@@ -2,10 +2,13 @@ package com.example.pruebasretrofit;
 
 import java.util.List;
 
-import com.google.gson.internal.StringMap;
+import fb.FacebookConnect;
 
 import retrofit.RestAdapter;
+import rx.Observable;
+import rx.functions.Action1;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,8 +22,10 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		new BlaAsync().execute();
-		
+		//new BlaAsync().execute();
+		Intent inte=new Intent();
+		inte.setClass(MainActivity.this,FacebookConnect.class);
+		this.startActivity(inte);
 		
 	}
 	
@@ -38,7 +43,7 @@ public class MainActivity extends Activity
 			    .setEndpoint("http://192.168.1.128:3000")
 			    .build();
 				ApiService service = restAdapter.create(ApiService.class);
-				List<User> repos = service.listRepos();
+				List<MyUser> repos = service.listRepos();
 
 				int a=3;
 				int b=a;
@@ -53,7 +58,9 @@ public class MainActivity extends Activity
 		}
 		
 	}
-
+	
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
